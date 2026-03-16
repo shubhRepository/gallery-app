@@ -23,7 +23,7 @@ export default function RenderLimitedImages({
       numColumns={4}
       keyExtractor={(item, index) => `${item}-${index}`}
       columnWrapperStyle={styles.row}
-      renderItem={({ _, index }) => {
+      renderItem={({ item, index }) => {
         return (
           <RenderImage
             date={date}

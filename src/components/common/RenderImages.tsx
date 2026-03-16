@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { PhotoIdentifier } from '@react-native-camera-roll/camera-roll';
 import { useAppDispatch, useAppSelector } from '../../hooks/useStoreHooks';
-import { enterSelectionMode } from '../../store/photoActions';
+import { enterSelectionMode } from '../../store/sectionActions';
 import RenderLimitedImages from './RenderLimitedImages';
 import { useMapIndexByUri } from '../../hooks/useGroupByMonthPhotos';
 import { useNavigation } from '@react-navigation/native';
@@ -19,7 +19,7 @@ export default function RenderImages({
   limitImages?: number;
 }) {
   const isSelectionMode = useAppSelector(
-    state => state.photoActions.isSelectionMode,
+    state => state.sectionActions.isSelectionMode,
   );
   const dispatch = useAppDispatch();
 
@@ -47,9 +47,7 @@ export default function RenderImages({
   };
 
   const handleLongImagePress = (uri: string) => {
-    console.log("photos: ", photos);
-    const scopeUris = photos.map(photo => photo.node.image.uri);
-    dispatch(enterSelectionMode({ scopeUris, uri }));
+    dispatch(enterSelectionMode({ sectionKey: date, uri }));
   };
 
   return (

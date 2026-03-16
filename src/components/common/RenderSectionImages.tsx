@@ -9,7 +9,8 @@ import {
 import { SIZE } from '../../constants/constants';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import { RootState } from '../../store/store';
+import { useAppDispatch, useAppSelector } from '../../hooks/useStoreHooks';
+import { toggleImageSelection } from '../../store/sectionActions';
 
 export default function RenderSectionImages({
   photos,
@@ -18,8 +19,15 @@ export default function RenderSectionImages({
   photos: PhotoIdentifier[];
   date: string;
 }) {
-  const isImageSelected = (state: RootState, sectionKey: string, uri: string) =>
-    state.sectionActions.selectedBySection[sectionKey]?.includes(uri) ?? false;
+  const dispatch = useAppDispatch();
+  const selectedUrisBySection = useAppSelector(
+    state => state.sectionActions.selectedBySection[date] || []
+  );
+
+  const handlePress = (uri: string) => {
+    dispatch(toggleImageSelection({ sectionKey: date, uri }));
+  };
+
   return (
     <FlatList
       data={photos}
@@ -29,32 +37,29 @@ export default function RenderSectionImages({
       columnWrapperStyle={styles.row}
       renderItem={({ item }) => {
         const uri = item.node.image.uri;
-        // const isSelected = selectedUris.includes(uri);
+        const isSelected = selectedUrisBySection.includes(uri);
 
         return (
           <TouchableOpacity
-            // onPress={() => handlePress(uri)}
-            // onLongPress={() => handleLongPress(uri)}
+            onPress={() => handlePress(uri)}
             activeOpacity={0.8}
           >
             <View>
               <Image source={{ uri }} style={styles.image} resizeMode="cover" />
-
-              {/* {isSelectionMode && (
-                <View style={styles.overlay}>
-                  {isSelected ? (
-                    <View style={styles.checkCircle}>
-                      <AntDesign name="check" size={14} color="#fff" />
-                    </View>
-                  ) : (
-                    <MaterialIcons
-                      name="radio-button-unchecked"
-                      color="#fff"
-                      size={24}
-                    />
-                  )}
-                </View>
-              )} */}
+              
+              <View style={styles.overlay}>
+                {isSelected ? (
+                  <View style={styles.checkCircle}>
+                    <AntDesign name="check" size={14} color="#fff" />
+                  </View>
+                ) : (
+                  <MaterialIcons
+                    name="radio-button-unchecked"
+                    color="#fff"
+                    size={24}
+                  />
+                )}
+              </View>
             </View>
           </TouchableOpacity>
         );

@@ -44,6 +44,10 @@ const sectionActionsSlice = createSlice({
       if (state.selectedBySection[sectionKey]?.length === 0) {
         delete state.selectedBySection[sectionKey];
       }
+
+      if (Object.keys(state.selectedBySection).length === 0) {
+        state.isSelectionMode = false;
+      }
     },
     toggleSectionSelection: (
       state,
@@ -62,6 +66,10 @@ const sectionActionsSlice = createSlice({
         delete state.selectedBySection[sectionKey];
       } else {
         state.selectedBySection[sectionKey] = [...sectionUris];
+      }
+
+      if (Object.keys(state.selectedBySection).length === 0) {
+        state.isSelectionMode = false;
       }
     },
   },

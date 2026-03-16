@@ -1,4 +1,4 @@
-import { SectionList, Text, StyleSheet, View, FlatList } from 'react-native';
+import { SectionList, Text, StyleSheet, View, FlatList, TouchableOpacity } from 'react-native';
 import { HomeNavigationProp } from '../../pages/Home';
 import {
   useGroupByMonthPhotos,
@@ -7,46 +7,20 @@ import {
 import { useAppDispatch, useAppSelector } from '../../hooks/useStoreHooks';
 import { enterSelectionMode } from '../../store/photoActions';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import { LIMIT_IMAGES } from '../../constants/constants';
 import RenderImages from '../common/RenderImages';
+import { toggleSectionSelection } from '../../store/sectionActions';
 
 export default function PhotoView() {
-  // const [showImageActionModal, setShowImageActionModal] =
-  //   useState<boolean>(false);
-  // const selectedUris = useAppSelector(state => state.photoActions.selectedUris);
+  const dispatch = useAppDispatch();
+  const selectedBySection = useAppSelector(
+    state => state.sectionActions.selectedBySection,
+  );
   const isSelectionMode = useAppSelector(
-    state => state.photoActions.isSelectionMode,
+    state => state.sectionActions.isSelectionMode,
   );
   const photosByMonth = useGroupByMonthPhotos();
-
-  // const handleImageClick = (uri: string) => {
-  //   const index = mapIndexByUri.get(uri) || 0;
-  //   navigation.navigate('ImageView', {
-  //     index,
-  //     photos,
-  //   });
-  // };
-
-  // const handleCloseModal = () => {
-  //   setShowImageActionModal(false);
-  //   dispatch(exitSelectionMode());
-  // };
-
-  // const handleLongImageClick = (uri: string) => {
-  //   // setShowImageActionModal(true);
-  //   const scopeUris = photos.map(photo => photo.node.image.uri);
-  //   dispatch(enterSelectionMode({ scopeUris, uri }));
-  // };
-
-  // const handleShareImages = () => {
-  //   shareMultipleImages(selectedUris);
-  //   handleCloseModal();
-  // };
-
-  // const handleDeleteImages = () => {
-  //   dispatch(deleteSelectedPhotos());
-  //   handleCloseModal();
-  // };
 
   return (
     <>
@@ -61,6 +35,33 @@ export default function PhotoView() {
                 <Text style={styles.sectionTitle}>
                   {item.title} ({item.data.length})
                 </Text>
+                
+                {isSelectionMode && (
+                  <TouchableOpacity
+                    onPress={() => {
+                      const sectionUris = item.data.map(p => p.node.image.uri);
+                      dispatch(
+                        toggleSectionSelection({
+                          sectionKey: item.title,
+                          sectionUris,
+                        })
+                      );
+                    }}
+                    style={{ padding: 12 }}
+                  >
+                    {selectedBySection[item.title]?.length === item.data.length ? (
+                      <View style={styles.checkCircleLarge}>
+                        <AntDesign name="check" size={16} color="#fff" />
+                      </View>
+                    ) : (
+                      <MaterialIcons
+                        name="radio-button-unchecked"
+                        color="#fff"
+                        size={24}
+                      />
+                    )}
+                  </TouchableOpacity>
+                )}
               </View>
 
               <RenderImages
@@ -95,5 +96,13 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: '800',
     color: '#fff',
+  },
+  checkCircleLarge: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    backgroundColor: '#99ae54',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
