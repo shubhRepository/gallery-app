@@ -1,105 +1,99 @@
-import { SectionList, Text, StyleSheet } from 'react-native';
+import { SectionList, Text, StyleSheet, View, FlatList } from 'react-native';
 import { HomeNavigationProp } from '../../pages/Home';
-import RenderImages from './RenderImages';
 import {
   useGroupByMonthPhotos,
   useMapIndexByUri,
 } from '../../hooks/useGroupByMonthPhotos';
 import { useAppDispatch, useAppSelector } from '../../hooks/useStoreHooks';
-import { useState } from 'react';
-import ImageActionModal from '../../modals/ImageActionModal';
-import {
-  enterSelectionMode,
-  exitSelectionMode,
-} from '../../store/photoActions';
-import { deleteSelectedPhotos } from '../../thunks/photoThunks';
-import { shareMultipleImages } from '../../helper/shareImage';
+import { enterSelectionMode } from '../../store/photoActions';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import { LIMIT_IMAGES } from '../../constants/constants';
+import RenderImages from '../common/RenderImages';
 
-export default function PhotoView({
-  navigation,
-}: {
-  navigation: HomeNavigationProp;
-}) {
-  const dispatch = useAppDispatch();
-  const [showImageActionModal, setShowImageActionModal] =
-    useState<boolean>(false);
-  const selectedUris = useAppSelector(state => state.photoActions.selectedUris);
-  const photos = useAppSelector(state => state.photos.photos);
+export default function PhotoView() {
+  // const [showImageActionModal, setShowImageActionModal] =
+  //   useState<boolean>(false);
+  // const selectedUris = useAppSelector(state => state.photoActions.selectedUris);
+  const isSelectionMode = useAppSelector(
+    state => state.photoActions.isSelectionMode,
+  );
   const photosByMonth = useGroupByMonthPhotos();
-  const mapIndexByUri = useMapIndexByUri(photos);
 
-  const handleImageClick = (uri: string) => {
-    const index = mapIndexByUri.get(uri) || 0;
-    navigation.navigate('ImageView', {
-      index,
-      photos,
-    });
-  };
+  // const handleImageClick = (uri: string) => {
+  //   const index = mapIndexByUri.get(uri) || 0;
+  //   navigation.navigate('ImageView', {
+  //     index,
+  //     photos,
+  //   });
+  // };
 
-  const handleCloseModal = () => {
-    setShowImageActionModal(false);
-    dispatch(exitSelectionMode());
-  };
+  // const handleCloseModal = () => {
+  //   setShowImageActionModal(false);
+  //   dispatch(exitSelectionMode());
+  // };
 
-  const handleLongImageClick = (uri: string) => {
-    setShowImageActionModal(true);
-    const scopeUris = photos.map(photo => photo.node.image.uri);
-    dispatch(enterSelectionMode({ scopeUris, uri }));
-  };
+  // const handleLongImageClick = (uri: string) => {
+  //   // setShowImageActionModal(true);
+  //   const scopeUris = photos.map(photo => photo.node.image.uri);
+  //   dispatch(enterSelectionMode({ scopeUris, uri }));
+  // };
 
-  const handleShareImages = () => {
-    shareMultipleImages(selectedUris);
-    handleCloseModal();
-  };
+  // const handleShareImages = () => {
+  //   shareMultipleImages(selectedUris);
+  //   handleCloseModal();
+  // };
 
-  const handleDeleteImages = () => {
-    dispatch(deleteSelectedPhotos());
-    handleCloseModal();
-  };
-
-  const handleMoreClick = (date: string) => {
-    navigation.navigate('MonthView', { date });
-  };
+  // const handleDeleteImages = () => {
+  //   dispatch(deleteSelectedPhotos());
+  //   handleCloseModal();
+  // };
 
   return (
     <>
       {photosByMonth.length > 0 && (
-        <SectionList
-          sections={photosByMonth}
-          keyExtractor={item => item.node.image.uri}
-          renderSectionHeader={({ section }) => (
-            <Text style={styles.sectionTitle}>
-              {section.title} ({section.data.length})
-            </Text>
+        <FlatList
+          data={photosByMonth}
+          keyExtractor={item => item.title}
+          renderItem={({ item, index }) => (
+            <View>
+              {/* Section Header */}
+              <View style={styles.headerContainer}>
+                <Text style={styles.sectionTitle}>
+                  {item.title} ({item.data.length})
+                </Text>
+              </View>
+
+              <RenderImages
+                date={item.title}
+                photos={item.data}
+                limitImages={LIMIT_IMAGES}
+              />
+            </View>
           )}
-          renderItem={({ section, index }) => (
-            <RenderImages
-              index={index}
-              sectionData={section}
-              onImageClick={handleImageClick}
-              onMoreClick={handleMoreClick}
-              onLongImageClick={handleLongImageClick}
-            />
-          )}
-          stickySectionHeadersEnabled
         />
       )}
-      <ImageActionModal
+      {/* <ImageActionModal
         visible={showImageActionModal}
         onClose={handleCloseModal}
         onShare={handleShareImages}
         onDelete={handleDeleteImages}
-      />
+      /> */}
     </>
   );
 }
 
 const styles = StyleSheet.create({
+  headerContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: '#080a05',
+    paddingRight: 18,
+  },
   sectionTitle: {
     padding: 12,
     fontSize: 20,
     fontWeight: '800',
-    backgroundColor: '#080a05',
     color: '#fff',
   },
 });

@@ -1,36 +1,31 @@
 package com.galleryapp
 
-import android.os.Bundle
 import android.app.Application
 import com.facebook.react.PackageList
-import com.facebook.react.ReactApplication
-import com.facebook.react.ReactHost
-import com.facebook.react.ReactNativeApplicationEntryPoint.loadReactNative
-import com.facebook.react.defaults.DefaultReactHost.getDefaultReactHost
-import com.swmansion.rnscreens.fragment.restoration.RNScreensFragmentFactory
+import com.facebook.react.ReactNativeHost
+import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint.load
+import com.facebook.react.defaults.DefaultReactNativeHost
+import com.facebook.soloader.SoLoader
 
-class MainApplication : Application(), ReactApplication {
+class MainApplication : Application() {
 
-  override val reactHost: ReactHost by lazy {
-    getDefaultReactHost(
-      context = applicationContext,
-      packageList =
-        PackageList(this).packages.apply {
-          // Packages that cannot be autolinked yet can be added manually here, for example:
-          // add(MyReactNativePackage())
-        },
-    )
-  }
+  private val reactNativeHost: ReactNativeHost =
+    object : DefaultReactNativeHost(this) {
+      override fun getUseDeveloperSupport(): Boolean = BuildConfig.DEBUG
 
-  override fun onCreate(savedInstanceState: Bundle?) {
+      override fun getPackages() =
+        PackageList(this).packages
+
+      override fun getJSMainModuleName(): String = "index"
+    }
+
+  override fun onCreate() {
     super.onCreate()
-    loadReactNative(this)
-    supportFragmentManager.fragmentFactory = RNScreensFragmentFactory()
-    super.onCreate(savedInstanceState)
+    SoLoader.init(this, false)
+    if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED) {
+      load()
+    }
   }
 
-  @Override
-  public boolean getUseDeveloperSupport() {
-    return BuildConfig.DEBUG;
-  }
+  fun getReactNativeHost(): ReactNativeHost = reactNativeHost
 }

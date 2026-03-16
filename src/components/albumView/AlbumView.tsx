@@ -20,16 +20,14 @@ import { BlurView } from '@react-native-community/blur';
 import { AlbumWithCover } from '../../types/Albums';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import CreateAlbumModal from '../../modals/CreateAlbumModal';
+import { useNavigation } from '@react-navigation/native';
 
 const { width } = Dimensions.get('window');
 const GAP = 16;
 const CARD_SIZE = (width - GAP * 3) / 2;
 
-export default function AlbumView({
-  navigation,
-}: {
-  navigation: HomeNavigationProp;
-}) {
+export default function AlbumView() {
+  const navigation = useNavigation<HomeNavigationProp>();
   const dispatch = useAppDispatch();
   const albums = useAppSelector(state => state.albums.albums);
   const localAppAlbums = useAppSelector(state => state.appAlbums.appAlbums);

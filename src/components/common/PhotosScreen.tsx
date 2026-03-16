@@ -9,10 +9,7 @@ import { useMapIndexByUri } from '../../hooks/useGroupByMonthPhotos';
 import RenderAllImages from './RenderAllImages';
 import { useResetSelectionOnBlur } from '../../hooks/useResetSelectionOnBlur';
 
-type NavigationProp = NativeStackNavigationProp<
-  RootStackParamList,
-  'ImageView'
->;
+type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
 export function PhotosScreen({
   title,

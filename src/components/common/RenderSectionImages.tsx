@@ -1,58 +1,25 @@
+import { PhotoIdentifier } from '@react-native-camera-roll/camera-roll';
 import {
+  View,
+  FlatList,
   StyleSheet,
   TouchableOpacity,
   Image,
-  View,
-  FlatList,
 } from 'react-native';
-import React, { useEffect } from 'react';
-import { PhotoIdentifier } from '@react-native-camera-roll/camera-roll';
 import { SIZE } from '../../constants/constants';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import { useAppDispatch, useAppSelector } from '../../hooks/useStoreHooks';
-import {
-  enterSelectionMode,
-  exitSelectionMode,
-  toggleSelectUri,
-} from '../../store/photoActions';
+import { RootState } from '../../store/store';
 
-export default function RenderAllImages({
+export default function RenderSectionImages({
   photos,
-  onImageClick,
+  date,
 }: {
   photos: PhotoIdentifier[];
-  onImageClick?: (uri: string) => void;
+  date: string;
 }) {
-  const isSelectionMode = useAppSelector(
-    state => state.photoActions.isSelectionMode,
-  );
-  const lockSelectionMode = useAppSelector(
-    state => state.photoActions.lockSelectionMode,
-  );
-  const selectedUris = useAppSelector(state => state.photoActions.selectedUris);
-  const dispatch = useAppDispatch();
-
-  const handlePress = (uri: string) => {
-    if (isSelectionMode) {
-      dispatch(toggleSelectUri(uri));
-    } else if (onImageClick) {
-      onImageClick(uri);
-    }
-  };
-
-  const handleLongPress = (uri: string) => {
-    if (isSelectionMode) return;
-    const scopeUris = photos.map(photo => photo.node.image.uri);
-    dispatch(enterSelectionMode({ scopeUris, uri }));
-  };
-
-  useEffect(() => {
-    if (isSelectionMode && selectedUris.length === 0 && !lockSelectionMode) {
-      dispatch(exitSelectionMode());
-    }
-  }, [isSelectionMode, selectedUris, dispatch, lockSelectionMode]);
-
+  const isImageSelected = (state: RootState, sectionKey: string, uri: string) =>
+    state.sectionActions.selectedBySection[sectionKey]?.includes(uri) ?? false;
   return (
     <FlatList
       data={photos}
@@ -62,18 +29,18 @@ export default function RenderAllImages({
       columnWrapperStyle={styles.row}
       renderItem={({ item }) => {
         const uri = item.node.image.uri;
-        const isSelected = selectedUris.includes(uri);
+        // const isSelected = selectedUris.includes(uri);
 
         return (
           <TouchableOpacity
-            onPress={() => handlePress(uri)}
-            onLongPress={() => handleLongPress(uri)}
+            // onPress={() => handlePress(uri)}
+            // onLongPress={() => handleLongPress(uri)}
             activeOpacity={0.8}
           >
             <View>
               <Image source={{ uri }} style={styles.image} resizeMode="cover" />
 
-              {isSelectionMode && (
+              {/* {isSelectionMode && (
                 <View style={styles.overlay}>
                   {isSelected ? (
                     <View style={styles.checkCircle}>
@@ -87,7 +54,7 @@ export default function RenderAllImages({
                     />
                   )}
                 </View>
-              )}
+              )} */}
             </View>
           </TouchableOpacity>
         );

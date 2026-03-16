@@ -7,6 +7,8 @@ export const TABS = {
 
 export const COLUMNS = 4;
 
+export const LIMIT_IMAGES = COLUMNS * 2;
+
 export const SIZE = Dimensions.get('window').width / (COLUMNS + 1);
 
 export const UNTITLED = 'untitled';

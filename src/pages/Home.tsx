@@ -10,7 +10,6 @@ import { requestPhotoPermission } from '../helper/requestPermissions';
 import { loadPhotos } from '../helper/loadPhotos';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types/RootStackParamList';
-import { useNavigation } from '@react-navigation/native';
 import { setPhotos } from '../store/photos';
 import { useAppDispatch } from '../hooks/useStoreHooks';
 import { loadAlbums } from '../storage/albums';
@@ -22,7 +21,6 @@ export type HomeNavigationProp = NativeStackNavigationProp<
 >;
 
 export default function Home() {
-  const navigation = useNavigation<HomeNavigationProp>();
   const [selectedTab, setSelectedTab] = useState(TABS.PHOTO);
   const [isPermissionGranted, setIsPermissionGranted] = useState(false);
   const dispatch = useAppDispatch();
@@ -56,9 +54,9 @@ export default function Home() {
       <Tabs selected={selectedTab} setSelected={setSelectedTab} />
       {isPermissionGranted ? (
         selectedTab === TABS.PHOTO ? (
-          <PhotoView navigation={navigation} />
+          <PhotoView />
         ) : (
-          <AlbumView navigation={navigation} />
+          <AlbumView />
         )
       ) : (
         <View style={styles.noShowContainer}>
