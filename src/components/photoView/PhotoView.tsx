@@ -1,16 +1,18 @@
-import { SectionList, Text, StyleSheet, View, FlatList, TouchableOpacity } from 'react-native';
-import { HomeNavigationProp } from '../../pages/Home';
 import {
-  useGroupByMonthPhotos,
-  useMapIndexByUri,
-} from '../../hooks/useGroupByMonthPhotos';
+  Text,
+  StyleSheet,
+  View,
+  FlatList,
+  TouchableOpacity,
+} from 'react-native';
+import { useGroupByMonthPhotos } from '../../hooks/useGroupByMonthPhotos';
 import { useAppDispatch, useAppSelector } from '../../hooks/useStoreHooks';
-import { enterSelectionMode } from '../../store/photoActions';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { LIMIT_IMAGES } from '../../constants/constants';
 import RenderImages from '../common/RenderImages';
 import { toggleSectionSelection } from '../../store/sectionActions';
+import MoreOptions from '../common/MoreOptions';
 
 export default function PhotoView() {
   const dispatch = useAppDispatch();
@@ -35,7 +37,7 @@ export default function PhotoView() {
                 <Text style={styles.sectionTitle}>
                   {item.title} ({item.data.length})
                 </Text>
-                
+
                 {isSelectionMode && (
                   <TouchableOpacity
                     onPress={() => {
@@ -44,12 +46,12 @@ export default function PhotoView() {
                         toggleSectionSelection({
                           sectionKey: item.title,
                           sectionUris,
-                        })
+                        }),
                       );
                     }}
-                    style={{ padding: 12 }}
                   >
-                    {selectedBySection[item.title]?.length === item.data.length ? (
+                    {selectedBySection[item.title]?.length ===
+                    item.data.length ? (
                       <View style={styles.checkCircleLarge}>
                         <AntDesign name="check" size={16} color="#fff" />
                       </View>
@@ -73,12 +75,7 @@ export default function PhotoView() {
           )}
         />
       )}
-      {/* <ImageActionModal
-        visible={showImageActionModal}
-        onClose={handleCloseModal}
-        onShare={handleShareImages}
-        onDelete={handleDeleteImages}
-      /> */}
+      <MoreOptions show={isSelectionMode} />
     </>
   );
 }
@@ -90,6 +87,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     backgroundColor: '#080a05',
     paddingRight: 18,
+    paddingBottom: 12,
   },
   sectionTitle: {
     padding: 12,
@@ -104,5 +102,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#99ae54',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  moreBtn: {
+    position: 'absolute',
+    backgroundColor: '#353630',
+    padding: 20,
+    borderRadius: 50,
+    bottom: 62,
+    right: 34,
   },
 });

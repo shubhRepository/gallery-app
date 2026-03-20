@@ -2,7 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { CameraRoll } from '@react-native-camera-roll/camera-roll';
 import { RootState } from '../store/store';
 import { removePhotosByUri } from '../store/photos';
-import { exitSelectionMode } from '../store/photoActions';
+import { clearSelection } from '../store/sectionActions';
 
 export const deleteSelectedPhotos = createAsyncThunk<
   void,
@@ -10,7 +10,8 @@ export const deleteSelectedPhotos = createAsyncThunk<
   { state: RootState }
 >('photos/deleteSelectedPhotos', async (_, { getState, dispatch }) => {
   const state = getState();
-  const selectedUris = state.photoActions.selectedUris;
+  const selectedBySection = state.sectionActions.selectedBySection;
+  const selectedUris = Object.values(selectedBySection).flat();
 
   if (selectedUris.length === 0) return;
 
@@ -18,5 +19,5 @@ export const deleteSelectedPhotos = createAsyncThunk<
 
   dispatch(removePhotosByUri(selectedUris));
 
-  dispatch(exitSelectionMode());
+  dispatch(clearSelection());
 });

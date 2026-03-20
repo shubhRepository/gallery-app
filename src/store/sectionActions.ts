@@ -72,6 +72,10 @@ const sectionActionsSlice = createSlice({
         state.isSelectionMode = false;
       }
     },
+    clearSelection: (state) => {
+      state.isSelectionMode = false;
+      state.selectedBySection = {};
+    },
   },
 });
 
@@ -79,6 +83,7 @@ export const {
   enterSelectionMode,
   toggleImageSelection,
   toggleSectionSelection,
+  clearSelection,
 } = sectionActionsSlice.actions;
 
 export const sectionActionsReducer = sectionActionsSlice.reducer;

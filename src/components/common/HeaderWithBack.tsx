@@ -25,16 +25,12 @@ export function HeaderWithBack({
   );
   const selectedUris = useAppSelector(state => state.photoActions.selectedUris);
   const scopeUris = useAppSelector(state => state.photoActions.scopeUris);
-  const deleteConfirmationAlert = useDeleteConfirmation();
+  // const deleteConfirmationAlert = useDeleteConfirmation();
   const isAllSelected =
     selectedUris.length > 0 && selectedUris.length === scopeUris.length;
 
   const handleSelectAll = () => {
     dispatch(toggleSelectAll());
-  };
-
-  const handleDelete = () => {
-    dispatch(deleteSelectedPhotos());
   };
 
   return (
@@ -60,11 +56,11 @@ export function HeaderWithBack({
               />
             )}
           </TouchableOpacity>
-          <TouchableOpacity
+          {/* <TouchableOpacity
             onPress={() => deleteConfirmationAlert(handleDelete)}
           >
             <AntDesign name="delete" color="#fff" size={24} />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
       )}
     </View>
@@ -84,6 +80,7 @@ const styles = StyleSheet.create({
   headerRight: {
     flexDirection: 'row',
     gap: 12,
+    right: 18,
   },
   title: {
     color: 'white',

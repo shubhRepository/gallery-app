@@ -8,6 +8,8 @@ import { RootStackParamList } from '../../types/RootStackParamList';
 import { useMapIndexByUri } from '../../hooks/useGroupByMonthPhotos';
 import RenderAllImages from './RenderAllImages';
 import { useResetSelectionOnBlur } from '../../hooks/useResetSelectionOnBlur';
+import { useAppSelector } from '../../hooks/useStoreHooks';
+import MoreOptions from './MoreOptions';
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
@@ -21,6 +23,9 @@ export function PhotosScreen({
   const navigation = useNavigation<NavigationProp>();
   const mapIndexByUri = useMapIndexByUri(photos);
   useResetSelectionOnBlur();
+  const isSelectionMode = useAppSelector(
+    state => state.photoActions.isSelectionMode,
+  );
 
   const handleImageClick = (uri: string) => {
     const index = mapIndexByUri.get(uri) ?? 0;
@@ -34,6 +39,7 @@ export function PhotosScreen({
     <SafeAreaView style={styles.main}>
       <HeaderWithBack title={title} onBack={() => navigation.goBack()} />
       <RenderAllImages photos={photos} onImageClick={handleImageClick} />
+      <MoreOptions show={isSelectionMode} />
     </SafeAreaView>
   );
 }
