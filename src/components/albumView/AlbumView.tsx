@@ -16,7 +16,7 @@ import {
 } from '../../helper/albums';
 import { useAppDispatch, useAppSelector } from '../../hooks/useStoreHooks';
 import { setAlbums } from '../../store/albums';
-import { BlurView } from '@react-native-community/blur';
+import LinearGradient from 'react-native-linear-gradient';
 import { AlbumWithCover } from '../../types/Albums';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import CreateAlbumModal from '../../modals/CreateAlbumModal';
@@ -66,12 +66,10 @@ export default function AlbumView() {
               <View style={styles.placeholder} />
             )}
 
-            <BlurView
+            <LinearGradient
               pointerEvents="none"
+              colors={['transparent', 'rgba(0,0,0,0.2)', 'rgba(0,0,0,0.8)']}
               style={styles.blur}
-              blurType="dark"
-              blurAmount={1}
-              reducedTransparencyFallbackColor="black"
             />
 
             <View style={styles.textContainer} pointerEvents="none">

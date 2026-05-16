@@ -6,7 +6,6 @@ import RenderLimitedImages from './RenderLimitedImages';
 import { useMapIndexByUri } from '../../hooks/useGroupByMonthPhotos';
 import { useNavigation } from '@react-navigation/native';
 import { HomeNavigationProp } from '../../pages/Home';
-import RenderAllImages from './RenderAllImages';
 import RenderSectionImages from './RenderSectionImages';
 
 export default function RenderImages({

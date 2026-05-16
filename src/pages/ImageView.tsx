@@ -1,4 +1,4 @@
-import Swiper from 'react-native-swiper';
+import Carousel from 'react-native-reanimated-carousel';
 import { Image, StyleSheet, Dimensions, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { RouteProp, useNavigation } from '@react-navigation/native';
@@ -23,26 +23,26 @@ export default function ImageView({ route }: { route: ImageViewRouteProp }) {
         visible={showUI}
         onBack={() => navigation.goBack()}
       />
-      <Swiper
-        index={index}
+      <Carousel
+        width={width}
+        height={height}
+        data={photos}
+        defaultIndex={index}
         loop={false}
-        showsPagination={false}
-        onIndexChanged={i => setCurrentIndex(i)}
-      >
-        {photos.map(photo => (
+        onSnapToItem={i => setCurrentIndex(i)}
+        renderItem={({ item }) => (
           <Pressable
-            key={photo.node.image.uri}
             style={styles.imageContainer}
             onPress={() => setShowUI(v => !v)}
           >
             <Image
-              source={{ uri: photo.node.image.uri }}
+              source={{ uri: item.node.image.uri }}
               style={styles.image}
               resizeMode="contain"
             />
           </Pressable>
-        ))}
-      </Swiper>
+        )}
+      />
     </SafeAreaView>
   );
 }

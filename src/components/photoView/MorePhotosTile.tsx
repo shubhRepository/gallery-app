@@ -1,5 +1,5 @@
 import { View, Image, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { BlurView } from '@react-native-community/blur';
+import LinearGradient from 'react-native-linear-gradient';
 
 export default function MorePhotosTile({
   uri,
@@ -23,12 +23,10 @@ export default function MorePhotosTile({
           resizeMode="cover"
         />
 
-        <BlurView
+        <LinearGradient
           pointerEvents="none"
+          colors={['rgba(0,0,0,0.3)', 'rgba(0,0,0,0.6)', 'rgba(0,0,0,0.8)']}
           style={StyleSheet.absoluteFill}
-          blurType="dark"
-          blurAmount={1}
-          reducedTransparencyFallbackColor="black"
         />
 
         <View style={styles.textWrapper}>

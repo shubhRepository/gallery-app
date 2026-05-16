@@ -30,7 +30,7 @@ export default function PhotoView() {
         <FlatList
           data={photosByMonth}
           keyExtractor={item => item.title}
-          renderItem={({ item, index }) => (
+          renderItem={({ item, index: _index }) => (
             <View>
               {/* Section Header */}
               <View style={styles.headerContainer}>

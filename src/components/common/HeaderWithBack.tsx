@@ -9,8 +9,6 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import { useAppDispatch, useAppSelector } from '../../hooks/useStoreHooks';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { toggleSelectAll } from '../../store/photoActions';
-import { useDeleteConfirmation } from '../../hooks/useConfirmDelete';
-import { deleteSelectedPhotos } from '../../thunks/photoThunks';
 
 export function HeaderWithBack({
   title,
